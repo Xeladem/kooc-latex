@@ -1,0 +1,368 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                         KOOC                           %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Version: 1.0
+% Date   : 29/01/2014
+% Author : Alexandre LOPES MEDA
+% Mail   : contact@kooc.fr
+% License: The MIT License (MIT)
+%
+%Copyright (c) 2015 Alexandre LOPES MEDA
+%
+%Permission is hereby granted, free of charge, to any person obtaining a copy
+%of this software and associated documentation files (the "Software"), to deal
+%in the Software without restriction, including without limitation the rights
+%to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+%copies of the Software, and to permit persons to whom the Software is
+%furnished to do so, subject to the following conditions:
+%
+%The above copyright notice and this permission notice shall be included in all
+%copies or substantial portions of the Software.
+%
+%THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+%IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+%FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+%AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+%LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+%OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+%SOFTWARE.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kooc}[2015/01/29 Package for recipe, V1.0]
+
+%%%%%%%%%%%%%%%%%% LOAD & REQUIERMENTS %%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{graphicx}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{iflang}
+\RequirePackage{xstring}
+\RequirePackage{setspace}
+\RequirePackage{tikz}
+\RequirePackage{adjustbox}
+\RequirePackage{ifthen}
+
+
+%%%%%%%%%%%%%%%%% COLORS DEFINITION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Use for the line in the title
+\xdefinecolor{titlehorizlinecolor}{RGB}{0,255,255}
+
+%%%%%%%%%%%%%%%%% PERSONAL COMMANDS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% COUNTERS
+
+%% For the  time we use a counter to keep the order
+\newcounter{sCounter}
+\newcounter{tempcount}
+
+
+%%%%% GENERAL COMMANDS
+
+\newcommand{\IfNoText}[3]{%
+	%\edef\Parameter{\IgnoreSpacesAndAllPars#1}
+	%\IfStrEq{\Parameter}{\empty}{#2}{#3}%
+	\IfStrEq{#1}{\empty}{#2}{#3}%
+}
+
+%Function tu create a custom marcro with counter in name
+\newcommand\variable[2]{\expandafter\def\csname var\Alph{#1}\endcsname{#2}}
+
+
+%%%%% TITLE COMMANDS
+
+\newcommand{\showtitle}[1]{{\huge \textbf{#1}}}
+\newcommand{\shownormaltitle}[1]{\textbf{#1}}
+\newcommand{\showtype}[1]{{\large\textbf{\textit{#1}}}}
+\newcommand{\shownormaltype}[1]{\textbf{#1}}
+\newcommand{\showsource}[1]{{\large\textbf{\IfLanguageName{english}{From}{De} #1}}}
+\newcommand{\shownormalsource}[1]{\textbf{\IfLanguageName{english}{From}{De} #1}}
+\newcommand{\showqty}[1]{{\large\textbf{\textit{\IfLanguageName{english}{for}{pour} #1}}}}
+\newcommand{\shownormalqty}[1]{\textbf{\IfLanguageName{english}{for}{pour} #1}}
+\newcommand{\showtitledesc}[1]{{\large``\textit{#1}''}}
+\newcommand{\shownormaltitledesc}[1]{``\textit{#1}''}
+\newcommand{\showtitleimg}[2]{\includegraphics[width=#2]{#1}}
+
+\newcommand{\titletopspace}{0cm}
+\newcommand{\titlebottomspace}{0.2cm}
+% Values for the icon height
+\newcommand{\titleicoheight}{10px}
+% Function to set the horiz line on the title part without picture
+\newcommand{\horrule}[2]{\noindent{\rule{#1}{#2}}}
+% Define the height of the picture in the title part (if it is set)
+\newcommand{\headerpictureheight}{3.5cm}
+% Define the width of the picture in the title part (if it is set)
+\newcommand{\headerpicturewidth}{\textwidth}
+% Define the opacity of the picture in the title part (if it is set)
+\newcommand{\headerpictureopacity}{0.6}
+% Define the color of the filter above the picture in the title part (if it is set)
+\newcommand{\headerpicturecolor}{black}
+
+%%%%% TIME COMMANDS
+\newcommand{\showtotaltime}[2]{\textbf{\IfLanguageName{english}{Total}{Total}}:~#1~#2}
+\newcommand{\showpreptime}[2]{\textbf{\IfLanguageName{english}{Preparation}{Préparation}}:~#1~#2}
+\newcommand{\showfridgetime}[2]{\textbf{\IfLanguageName{english}{Fridge}{Réfrigerateur}}:~#1~#2}
+\newcommand{\showleavetime}[2]{\textbf{\IfLanguageName{english}{Leavening}{Repos}}:~#1~#2}
+\newcommand{\showcooking}[3]{\textbf{#1}:~#2~\IfLanguageName{english}{at}{à}~#3}
+\newcommand{\showcustomtime}[3]{\textbf{#1}:~#2~#3}
+
+\newcommand{\timeseparator}{~-~}
+
+% List all the times registered by the user
+\newcommand{\listtime}[1]{
+	\setcounter{tempcount}{-1}
+	\loop\ifnum\value{tempcount}<\value{#1}
+	\stepcounter{tempcount}
+	\ifcsname var\Alph{tempcount}\endcsname{}{\csname var\Alph{tempcount}\endcsname}
+	\repeat
+	
+}
+
+
+
+%%%%%%%%%%%%%%%%% CORE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%=================== RECIPE PART ===================%
+%% Create the main environment for the recipes
+%
+% Param #1(opt) : type of the recipe
+% Param #2 : recipe title
+% Param #3 : number of part to serve
+% Param #4 : difficulty
+%%
+%% BEGIN RECIPE ENV
+\newenvironment{recipe}[4][]{
+	
+	% Reinitialize the counters
+	\setcounter{sCounter}{0}
+	
+	%=================== TITLE PART ===================%
+	
+	%%Function to retrieve the recipe parameters
+	\newcommand{\rtitle}{#2}
+	\newcommand{\rqty}{#3}
+	\newcommand{\rtype}{#1}
+	\newcommand{\rdifficulty}{#4}
+	
+	
+	%%% Standart title without image
+	\newcommand{\standardtitle}[3]{
+		\begin{center}
+			\showtitle{\rtitle}\\[0.3em]
+			% create a line to separe the title and the informations
+			-\IfNoText{\rtype}{}{ \showtype{\rtype}}
+			\IfNoText{\rqty}{}{\showqty{\rqty}} -\\[0.5em]
+			\IfNoText{##1}{}{\showtitledesc{##1}}
+			\horrule{0.7\linewidth}{0.1em}\\
+			\vspace{0.2em}
+			%Show the recipe times
+			\listtime{sCounter}
+			%Here is the custom part
+			##3
+		\end{center}
+	}
+	
+	%%% Title over an image
+	\newcommand{\overtitle}[3]{
+		
+		% Create the title whith a picture in background
+		\begin{tikzpicture}
+		\node[left,inner sep=0] (image){\adjincludegraphics[height=\headerpictureheight,width=\headerpicturewidth,trim={0 {0.35\height} 0 {0.35\height}},clip]{##2}};
+		
+		%Pour les test, dessine un rectangle autour de la zone 
+		%\node (text) [draw,text width=\linewidth, align=center,left,inner sep=0]{{\Huge \textbf{#1}} \\[2mm] \textbf{\large\nbserve{#2}{#3}} \\[3mm] \enquote{\textit{#4}}};
+		\node (text) [minimum width=\headerpicturewidth,minimum height=\headerpictureheight,fill=\headerpicturecolor,text opacity=1,opacity=\headerpictureopacity,text width=\headerpicturewidth,inner sep=0, align=center,left]
+		{\color{White}{\showtitle{\rtitle}\\[0.3em]
+				% create a line to separe the title and the informations
+				\IfNoText{\rtype}{}{- \showtype{\rtype}}
+				\IfNoText{\rqty}{}{\showqty{\rqty} -\\[0.5em]}
+				\IfNoText{##1}{}{\textbf{\showtitledesc{##1}}\\}
+				\horrule{0.7\linewidth}{0.1em}
+				\vspace{0.2em}
+				%Show the recipe times
+				\listtime{sCounter}
+				%Here is the custom part
+				##3}};
+		
+		\end{tikzpicture}	
+		
+		
+	}
+	
+	%%% Title with image aside
+	\newcommand{\sidetitle}[4][right]{
+		\IfEqCase*{##1}{%
+			{right}{
+				\begin{minipage}{0.35\linewidth}
+					\showtitleimg{##3}{\linewidth}
+				\end{minipage}\hspace{0.2em}
+				\begin{minipage}{0.55\linewidth}
+					\centering
+					\showtitle{\rtitle}\\[0.3em]
+					% create a line to separe the title and the informations
+					- \IfNoText{\rtype}{}{\showtype{\rtype}}
+					\IfNoText{\rqty}{}{\showqty{\rqty} -\\[0.5em]}
+					\IfNoText{##2}{}{\showtitledesc{##2}\\}
+					\horrule{0.7\linewidth}{0.1em}\\
+					\vspace{0.3em}
+					%Show the recipe times
+					\listtime{sCounter}
+					%Here begin the custom part
+					##4
+				\end{minipage}}
+				{left}{
+					\begin{minipage}{0.55\linewidth}
+						\centering
+						\showtitle{\rtitle}\\[0.3em]
+						% create a line to separe the title and the informations
+						\IfNoText{\rtype}{}{\showtype{\rtype}}
+						\IfNoText{\rqty}{}{\showqty{\rqty}\\[0.5em]}
+						\IfNoText{##2}{}{\showtitledesc{##2}\\}
+						\horrule{0.7\linewidth}{0.1em}\\
+						\vspace{0.2em}
+						%Show the recipe times
+						%\listtime{sCounter}
+						%Here begin the custom part
+						##4
+					\end{minipage}\hspace{0.2em}
+					\begin{minipage}{0.40\linewidth}
+						\showtitleimg{##3}{\linewidth}
+					\end{minipage}}%
+				}[]%
+				
+			}
+			
+			%%% Command to generate a title
+			% #1 [opt] : is the title type
+			% #2 : is the recipe description
+			% #3 : is image for the over and side title
+			% #4 : is the custom part for side title
+			\newcommand{\makerecipetitle}[4][normal]{
+				\par\noindent%
+				\IfEqCase*{##1}{%
+					{normal}{\standardtitle{##2}{##3}{##4}}%
+					{over}{\overtitle{##2}{##3}{##4}}%
+					{side}{\sidetitle{##2}{##3}{##4}}%
+				}[]%
+			}
+			
+			%================ END TITLE PART =================%
+			
+			%============== BEGIN SETTINGS PART ==============%
+			%
+			% Set the different times for the recipe
+			%
+			%
+			\newcommand{\setcustomtime}[3]{
+				\expandafter\def\csname r##1\endcsname{\showcustomtime{##1}{##2}{##3}}
+				\variable{sCounter}{\showcustomtime{##1}{##2}{##3}}
+				\stepcounter{sCounter}}
+			
+			\newcommand{\settotaltime}[2]{
+				\newcommand{\rtotaltime}{\showtotaltime{##1}{##2}}
+				\variable{sCounter}{\showtotaltime{##1}{##2}}
+				\stepcounter{sCounter}}
+			
+			\newcommand{\setpreptime}[2]{
+				\newcommand{\rpreptime}{\showpreptime{##1}{##2}}
+				\variable{sCounter}{\showpreptime{##1}{##2}}
+				\stepcounter{sCounter}}
+			
+			\newcommand{\setfridgetime}[2]{
+				\newcommand{\rfridgetime}{\showfridgetime{##1}{##2}}
+				\variable{sCounter}{\showfridgetime{##1}{##2}}
+				\stepcounter{sCounter}}
+			
+			\newcommand{\setleavetime}[2]{
+				\newcommand{\rleavetime}{\showleavetime{##1}{##2}}
+				\variable{sCounter}{\showleavetime{##1}{##2}}
+				\stepcounter{sCounter}}
+			
+			\newcommand{\setcooking}[3]{
+				\expandafter\def\csname r##1\endcsname{\showcooking{##1}{##2}{##3}}
+				\variable{sCounter}{\showcooking{##1}{##2}{##3}}
+				\stepcounter{sCounter}}
+			
+			%=============== END SETTINGS PART =================%
+			
+			
+			%=================== STEPS ENC ===================%
+			%% Create the env for the recipe steps
+			%%	
+			% Param #1 : the title for the steps bloc
+			%%
+			\newenvironment{steps}[1]{
+				
+				%% Command to create a step
+				% Param 1: Description of the step 
+				% Param 2: A note
+				%%
+				\DeclareRobustCommand{\step}[2]{
+					% An enumerate is used for the env so we create an item with the description content
+					\item ####1
+					% If there is a note, we print it
+					\IfNoText{####2}{}{\\[0.2em] \indent ---``\textit{####2}''}
+				}
+				
+				% Configure and print the title
+				\flushleft
+				% If the title isn't empty, we print a block then the title
+				\IfNoText{##1}{}{\textbf{\large##1}}
+				% Begin the enumerate env for the steps
+				\begin{enumerate}
+					
+				}%% END STEPS ENV
+				{\end{enumerate}}
+			
+			%=================== INGREDIENTS ENC ===================%
+			
+			%% Create the env for the ingredients list 
+			%%	
+			% Param #1 : the title for the ingredient env
+			% Param #2 : the label use for each item (default Nothing)
+			% Param #3 : the color of the block before the title
+			%%
+			\newenvironment{ingredients}[2]{
+				% Redefine the item label
+				\renewcommand\labelitemi{##2}
+				
+				%% Create the command to declare an ingredient
+				%%Params are:
+				% #1 Ingredient Qte
+				% #2 Ingredient Unit
+				% #3 Ingredient Name
+				% #4 Ingredient  description
+				%%
+				\DeclareRobustCommand{\ingredient}[4]{	
+					% Print the ingredient
+					\item \textbf{####1 ####2 ####3}
+					% Test if there is a comment
+					\IfNoText{####4}{}{\\[0.2em] \indent \small ---``\textit{####4}'' \\[0.2em] }			
+				}
+				%Align to the left
+				\flushleft
+				% If the title isn't empty, we print a block then the title
+				\ifthenelse{\equal{##1}{}}{}{\textbf{\large##1}\\}
+				% Initiate the itemize env for the ingredient
+				\begin{itemize}
+				}%% END INGREDIENT LIST ENV
+				{\end{itemize}\vspace{0.2em}}
+		}{}
+		%=================== END RECIPE PART ===================%
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
