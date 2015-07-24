@@ -176,7 +176,7 @@
 				\IfNoText{\rtype}{}{- \showtype{\rtype}}
 				\IfNoText{\rqty}{}{\showqty{\rqty} -\\[0.5em]}
 				\IfNoText{##1}{}{\textbf{\showtitledesc{##1}}\\}
-				\horrule{0.7\linewidth}{0.1em}
+				\horrule{0.7\linewidth}{0.1em}\\
 				\vspace{0.2em}
 				%Show the recipe times
 				\listtime{sCounter}
@@ -205,7 +205,7 @@
 					\horrule{0.7\linewidth}{0.1em}\\
 					\vspace{0.3em}
 					%Show the recipe times
-					\listtime{sCounter}
+					\listtime{sCounter}\\
 					%Here begin the custom part
 					##4
 				\end{minipage}}
@@ -217,7 +217,7 @@
 						\IfNoText{\rtype}{}{\showtype{\rtype}}
 						\IfNoText{\rqty}{}{\showqty{\rqty}\\[0.5em]}
 						\IfNoText{##2}{}{\showtitledesc{##2}\\}
-						\horrule{0.7\linewidth}{0.1em}\\
+						\horrule{0.7\linewidth}{0.1em}
 						\vspace{0.2em}
 						%Show the recipe times
 						%\listtime{sCounter}
@@ -243,6 +243,7 @@
 					{over}{\overtitle{##2}{##3}{##4}}%
 					{side}{\sidetitle{##2}{##3}{##4}}%
 				}[]%
+				\vspace{1.5em}
 			}
 			
 			%================ END TITLE PART =================%
@@ -334,9 +335,9 @@
 				%%
 				\DeclareRobustCommand{\ingredient}[4]{	
 					% Print the ingredient
-					\item \textbf{####1 ####2 ####3}
+					\item \textbf{####1 ####2 ####3}\\[0.2em]
 					% Test if there is a comment
-					\IfNoText{####4}{}{\\[0.2em] \indent \small ---``\textit{####4}'' \\[0.2em] }			
+					\IfNoText{####4}{}{ \indent \small ---''\textit{####4}'' \\[0.2em] }			
 				}
 				%Align to the left
 				\flushleft
