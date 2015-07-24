@@ -1,7 +1,8 @@
 # Kooc LaTeX
-[![PDF Status](https://www.sharelatex.com/github/repos/Xeladem/kooc-latex/builds/latest/badge.svg)](https://www.sharelatex.com/github/repos/Xeladem/kooc-latex/builds/latest/output.pdf)
+
 Kooc is a LaTeX style to write recipe.
 
+[![PDF Status](https://www.sharelatex.com/github/repos/Xeladem/kooc-latex/builds/latest/badge.svg)](https://www.sharelatex.com/github/repos/Xeladem/kooc-latex/builds/latest/output.pdf)
 ## Getting Started
 ### Installing
 
