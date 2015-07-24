@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{kooc}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage[left=1cm, right=1cm, top=2.00cm, bottom=2.00cm]{geometry}
+
+\begin{document}
+
+    % Initiate the recipe env
+    \begin{recipe}[Recipe]{Recipe Title}{2 persons}
+       
+        % Set the recipe parameters
+        \settotaltime{1}{h}
+    	\setfridgetime{20}{min}
+    	\setpreptime{30}{min}
+    	\setleavetime{35}{min}
+    	\setcustomtime{Custom}{50}{min}
+    
+        % Make the recipe title
+    	\makerecipetitle{Recipe description here}{}{}
+    
+        \begin{minipage}{0.30\textwidth}
+        
+            % Initiate the ingredients env and add each ingredients
+    		\begin{ingredients}{Ingredients for the recipe:}{$\bullet$}
+    		
+    			\ingredient{380}{g}{flour}{This is a note}
+    			\ingredient{26}{cl}{milk}{This is an other note}
+    			\ingredient{1}{tablespoon}{baking powder}{}
+    			\ingredient{3}{big}{eggs}{}
+    			\ingredient{60}{g}{sugar}{}
+    			\ingredient{5}{g}{salt}{}
+    			
+    		\end{ingredients}
+    		
+    	\end{minipage}
+    	\hspace{0.1em}
+    	\begin{minipage}{0.60\textwidth}
+    	
+    	    %Initiate the steps env and add each steps
+    		\begin{steps}{}
+    			\step{This is the first step}{}
+    			
+    			\step{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum at mi in laoreet. Etiam at tellus vel neque vulputate tristique at eu felis. In molestie elit vitae leo eleifend vestibulum. Mauris ipsum dui, feugiat vitae ante auctor, finibus blandit mauris. Pellentesque consectetur, risus at gravida porta, leo dolor ornare neque, et tempor magna lectus et ipsum. Ut in urna ipsum. Duis vel augue eu augue consequat ullamcorper eget vitae massa. Sed nec maximus ex. In faucibus lobortis ligula, nec ultricies metus posuere et. }{}
+    			
+    			\step{Nunc luctus porttitor volutpat. Phasellus id hendrerit tortor. Vivamus tincidunt efficitur arcu, eget efficitur orci. Phasellus lobortis lorem posuere sapien sagittis, in mattis arcu laoreet. Nam accumsan dui eu aliquet sodales. Proin vitae maximus diam, in mattis tellus. Duis libero neque, consequat sit amet porttitor sit amet, accumsan quis justo. Donec euismod rutrum neque eget condimentum. Mauris vitae sodales neque, sed fermentum ante. Aliquam ultricies at nunc at semper. Nullam sit amet pellentesque purus, non mattis quam. Fusce vehicula lectus lorem, in imperdiet quam egestas quis. Cras ligula tellus, ullamcorper in blandit sed, tincidunt sit amet nisi}{This is a note}
+    			
+    			\step{This is the last step.}{}
+    
+    		\end{steps}
+    	\end{minipage}
+    
+    \end{recipe}
+
+\end{document}
+
