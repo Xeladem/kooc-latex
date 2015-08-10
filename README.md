@@ -38,8 +38,74 @@ for example:
  \end{recipe}
 ```
 
+The **first** optional parameter is the type of recipe (appetizer, dinner, dessert, drink, appetize,...).
+
+The **second** one is the recipe title.
+
+The **last** one is a decription.
+
+#### Set the recipe parameters
+
+First of all, you have to set the recipe parameter. There are four main parameters:
+ * Total time - \settotaltime{<Time>}{<unit>}
+ * Fridge time - \setfridgetime{<Time>}{<unit>}
+ * Preparation time - \setpreptime{<Time>}{<unit>}
+ * Leavening time - \setleavetime{<Time>}{<unit>}
+ 
+These parameters are based on the same syntax and can be used like this:
+```latex
+ \settotaltime{1h}{45min}
+ \setfridgetime{20}{min}
+ \setpreptime{30}{min}
+ \setleavetime{35}{min}
+```
+
+The is an extra command that can be used for custom parameters.
+```latex
+\setcustomtime{<name>}{<Time>}{<unit>}
+```
+
+Order is important !! Parameters are printed according to the declaration order.
+
 #### Add the title
-#### Write down your ingredients 
+
+Now, you can add the title with this command:
+
+```latex
+% Make the recipe title
+\makerecipetitle[<type>]{<description>}{<picture path>}{<extra info>}
+```
+
+for example:
+
+```latex
+% Make the recipe title
+\makerecipetitle[over]{The is the best recipe ever !}{img/cake}{See my website <website>}
+```
+
+The optional parameter is the type of the title section. With the standard tite (no optional option), two types are available:
+ * [side] - the picture is on the left side of the title.
+ * [oven] - the picture is below the title.
+
+#### Write down your ingredients
+
+Ingredients need to be declared in a custom environnement:
+
+```latex
+ \begin{ingredients}{<ingredient list title>}{<custom bullet>}
+   ...
+   [ingredients here]
+   ...
+ \end{ingredients}
+```
+
+The first parameter is the ingredient list title. For example: "For the topping"
+
+The second one can be left blank and is used to set the item list "bullet".
+
+##### Add an ingredient
+
+
 #### Set the steps
 
 
