@@ -115,7 +115,7 @@ Feel free to submit reviews or issues ;)
 
 ## Authors
 
-Alexandre LOPES MEDA
+Alexandre LM
 
 See also the list of [contributors](https://github.com/Xeladem/kooc-latex/contributors) who participated in this project.
 
